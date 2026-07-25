@@ -8,6 +8,7 @@
 
 <p align="center">
   <a href="#quick-start">Quick Start</a> ·
+  <a href="#native-windows-desktop-app">Windows Desktop App</a> ·
   <a href="docs/setup.md">Setup Guide</a> ·
   <a href="CONTRIBUTING.md">Contributing</a> ·
   <a href="ROADMAP.md">Roadmap</a>
@@ -36,7 +37,38 @@ docker compose up -d --build
 
 Open `http://localhost:7000` when the containers are healthy. The first admin password is printed in `docker compose logs odysseus`.
 
-Native installs, GPU notes, Windows/macOS instructions, HTTPS, and configuration live in the [setup guide](docs/setup.md).
+Native installs, GPU notes, Windows/macOS instructions, HTTPS, and configuration live in the [setup guide](docs/setup.md). Prefer a real app over a browser tab on Windows? See [Native Windows desktop app](#native-windows-desktop-app).
+
+## Native Windows desktop app
+
+`odysseus-desktop.py` runs Odysseus as a native Windows desktop app — it starts the
+server for you, embeds the existing web UI in its own window (via
+[pywebview](https://pywebview.flowrl.com/)), lives in the system tray, and adds itself
+to the Start Menu. No Docker, no browser tab.
+
+<p align="center">
+  <img src="docs/odysseus-windows.png" alt="Odysseus running as a native Windows desktop app, in the Start Menu">
+</p>
+
+```powershell
+git clone https://github.com/odysseus-dev/odysseus.git
+cd odysseus
+py -m venv venv
+venv\Scripts\python.exe -m pip install -r requirements.txt
+venv\Scripts\python.exe -m pip install pywebview pystray pillow
+venv\Scripts\python.exe odysseus-desktop.py
+```
+
+On first run the harness creates its data directory and database, starts the backend,
+and opens the app in its own window — the UI's own **Create Admin Account** screen
+handles first-time setup. After that, launch it any time from the **Start Menu**.
+
+The three extra packages (`pywebview`, `pystray`, `pillow`) are the only added
+dependencies and live in [`requirements-optional.txt`](requirements-optional.txt); the
+server, Docker, and browser-based use don't need them, so core installs stay
+unaffected. A [PyInstaller](https://pyinstaller.org/) spec
+([`odysseus-desktop.spec`](odysseus-desktop.spec)) is included for building a
+standalone `.exe`.
 
 ## Features
 
